@@ -5,12 +5,17 @@
 		<style>
 			input, button, body {font-family: Georgia; font-size: 30px; background: black; color: white;}
       input, button {border: 5px solid white; padding: 10px; border-radius: 10px;}
+			button:hover {background: #555; cursor: pointer;}
+			button:active {background: #888;}
+			:focus {outline: none;}
+			input {margin-right: 5px; width: 300px;}
+			input[type="number"]::-webkit-inner-spin-button, input[type="number"]::-webkit-outer-spin-button {display: none;}
       h1 {margin: 0;}
 		</style>
 	</head>
 	<body>
     <h1>Prime Checker!</h1>
-		<input type="number" min="2" max="9007199254740991" value="2" id="num" title="Enter an integer between 2 and 9,007,199,254,740,991, inclusive."><button onclick="checkPrime()">Go</button><br>
+		<input type="number" min="2" max="9007199254740991" value="2" id="num" title="Enter an integer between 2 and 9,007,199,254,740,991, inclusive."><button onclick="checkPrime()" id="checkBtn">Go</button><br>
 		<span id="numChecked">2</span> is <span id="result">prime</span>, having <span id="factors">0</span> factor pairs other than itself and 1.<br>
 		Currently checking against <span id="checkAgainst">nothing</span><br>
 		Last number to be checked: <span id="lastNum">0</span><br>
@@ -18,6 +23,7 @@
 	</body>
 	<script>
 		function checkPrime() {
+			document.getElementById("checkBtn").style.visibility = "hidden";
 			var num = parseInt(document.getElementById("num").value);
 			document.title = num + " | " + 1;
 			document.getElementById("numChecked").innerHTML = num;
@@ -27,7 +33,6 @@
 				document.getElementById("result").innerHTML = "prime";
 			} else if (num > 3) {
 				if (num % 2 == 0) {
-					b -= 1;
 					prime = false;
 					document.getElementById("result").innerHTML = "composite";
 					factorPairs += 1;
@@ -41,7 +46,6 @@
 				elapsed = now - start;
 				m = Math.floor(elapsed / 60000);
 				s = Math.floor(elapsed % 60000 / 1000);
-				ms= Math.floor(elapsed % 1000);
 			}, 0);
 			var t = setInterval(function() {
 				document.title = num + " | " + a;
@@ -53,7 +57,7 @@
 				m2 = Math.floor(elapsed2 / 60000);
 				s2 = Math.floor(elapsed2 % 60000 / 1000);
 				ms = Math.floor(elapsed2 % 1000);
-				document.getElementById("timeTaken").innerHTML = m2 + ":" + ("0" + s2).slice(-2) + "." + ("0" + ms).slice(-3);
+				document.getElementById("timeTaken").innerHTML = m2 + ":" + ("0" + s2).slice(-2);
 				for (var s = 0; s < 64; s++) {
 					a += 2;
 					document.getElementById("checkAgainst").innerHTML = a;
@@ -69,10 +73,11 @@
 						clearInterval(x);
 						document.getElementById("checkAgainst").innerHTML = "nothing";
 						document.getElementById("lastNum").innerHTML = 0;
-						document.title = "Complete | Time: " + m2 + ":" + ("0" + s2).slice(-2) + "." + ("0" + ms).slice(-3);
+						document.title = "Complete | Time: " + m2 + ":" + ("0" + s2).slice(-2) + "." + ("00" + ms).slice(-3);
 						setTimeout(function() {
 							document.title = "Prime Checker";
-						}, 5000);
+							document.getElementById("checkBtn").style.visibility = "visible";
+						}, 3000);
 					}
 				}
 			}, 0);
